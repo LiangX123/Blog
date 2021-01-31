@@ -472,9 +472,9 @@ if(x < 0) {
    ```java
    class Thread1 extends Thread{				
    	private String name;
-       public Thread1(String name) {
-          this.name=name;
-       }
+       	public Thread1(String name) {
+          	this.name=name;
+       	}
    	public void run() 							//结果
            for (int i = 0; i < 5; i++) {					//A执行  :  0
                System.out.println(name + "执行  :  " + i);	   	      //B执行  :  0
@@ -483,9 +483,9 @@ if(x < 0) {
                } catch (InterruptedException e) {				//A执行  :  3
                    e.printStackTrace();						//A执行  :  4
                }								//B执行  :  1
-           }									//B执行  :  2  																				//B执行  :  3 
-   	}									//B执行  :  4 
-   }															
+           }									//B执行  :  2  										
+   	}									//B执行  :  3 
+   }										//B执行  :  4 				
    class Thread2 implements Runnable{
    	private String name;
    
