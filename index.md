@@ -476,13 +476,13 @@ if(x < 0) {
           	this.name=name;
        	}
    	public void run() 							//结果
-           for (int i = 0; i < 5; i++) {					//A执行  :  0
-               System.out.println(name + "执行  :  " + i);	   	      //B执行  :  0
+           for (int i = 0; i < 5; i++) {						//A执行  :  0
+               System.out.println(name + "执行  :  " + i);	   	      		//B执行  :  0
                try {								//A执行  :  1
                    sleep((int) Math.random() * 10);				//A执行  :  2
-               } catch (InterruptedException e) {				//A执行  :  3
+               } catch (InterruptedException e) {					//A执行  :  3
                    e.printStackTrace();						//A执行  :  4
-               }								//B执行  :  1
+               }									//B执行  :  1
            }									//B执行  :  2  										
    	}									//B执行  :  3 
    }										//B执行  :  4 				
@@ -496,7 +496,7 @@ if(x < 0) {
    	@Override
    	public void run() {						
    		  for (int i = 0; i < 5; i++) {
-   	            System.out.println(name + "执行  :  " + i);		      //C执行  :  0
+   	            System.out.println(name + "执行  :  " + i);		      	//C执行  :  0
    	            try {							//D执行  :  0
    	            	Thread.sleep((int) Math.random() * 10);			//D执行  :  1
    	            } catch (InterruptedException e) {				//C执行  :  1
