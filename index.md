@@ -372,7 +372,8 @@ public void showInfo() throws Exception {    // 抛出Exception
   FileInputStream in = new FileInputStream("C://Record.txt");  // 创建IO对象 
 }
 
-//如果希望程序自行抛出异常，可以使用throw语句来实现。使用throw语句抛出的是异常类的实例，通常与if语句一起使用
+/*如果希望程序自行抛出异常，可以使用throw语句来实现。
+使用throw语句抛出的是异常类的实例，通常与if语句一起使用*/
 if(x < 0) {
   throw new Exception("程序异常，x不能小于0。");
 }
@@ -474,16 +475,16 @@ if(x < 0) {
        public Thread1(String name) {
           this.name=name;
        }
-   	public void run() 												//结果
-           for (int i = 0; i < 5; i++) {								//A执行  :  0
-               System.out.println(name + "执行  :  " + i);	   		   //B执行  :  0
-               try {													//A执行  :  1
-                   sleep((int) Math.random() * 10);					//A执行  :  2
-               } catch (InterruptedException e) {						//A执行  :  3
-                   e.printStackTrace();								//A执行  :  4
-               }														//B执行  :  1
-           }															//B执行  :  2  																											//B执行  :  3 
-   	}																//B执行  :  4 
+   	public void run() 							//结果
+           for (int i = 0; i < 5; i++) {					//A执行  :  0
+               System.out.println(name + "执行  :  " + i);	   	      //B执行  :  0
+               try {								//A执行  :  1
+                   sleep((int) Math.random() * 10);				//A执行  :  2
+               } catch (InterruptedException e) {				//A执行  :  3
+                   e.printStackTrace();						//A执行  :  4
+               }								//B执行  :  1
+           }									//B执行  :  2  																				//B执行  :  3 
+   	}									//B执行  :  4 
    }															
    class Thread2 implements Runnable{
    	private String name;
@@ -493,18 +494,18 @@ if(x < 0) {
    	}
    
    	@Override
-   	public void run() {												//结果
-   		  for (int i = 0; i < 5; i++) {								//输出：
-   	            System.out.println(name + "执行  :  " + i);		   //C执行  :  0
-   	            try {												//D执行  :  0
+   	public void run() {							//结果
+   		  for (int i = 0; i < 5; i++) {					//输出：
+   	            System.out.println(name + "执行  :  " + i);		      //C执行  :  0
+   	            try {							//D执行  :  0
    	            	Thread.sleep((int) Math.random() * 10);			//D执行  :  1
-   	            } catch (InterruptedException e) {					//C执行  :  1
-   	                e.printStackTrace();							//D执行  :  2
-   	            }													//C执行  :  2
-   	        }														//D执行  :  3
-   																	//C执行  :  3
-   	}																//D执行  :  4
-   																	//C执行  :  4
+   	            } catch (InterruptedException e) {				//C执行  :  1
+   	                e.printStackTrace();					//D执行  :  2
+   	            }								//C执行  :  2
+   	        }								//D执行  :  3
+   										//C执行  :  3
+   	}									//D执行  :  4
+   										//C执行  :  4
    }
    public class Main {
    	public static void main(String[] args) {			
