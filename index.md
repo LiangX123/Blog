@@ -494,8 +494,8 @@ if(x < 0) {
    	}
    
    	@Override
-   	public void run() {							//结果
-   		  for (int i = 0; i < 5; i++) {					//输出：
+   	public void run() {						
+   		  for (int i = 0; i < 5; i++) {
    	            System.out.println(name + "执行  :  " + i);		      //C执行  :  0
    	            try {							//D执行  :  0
    	            	Thread.sleep((int) Math.random() * 10);			//D执行  :  1
