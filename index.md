@@ -12,43 +12,46 @@
 
 ### 一、Java基础
 
-#### 1、java简介  
-##### 重要概念	
-##### 环境搭建
-  
-#### 2、数据类型
-##### 基本数据类型
-##### 引用数据类型
-##### 常量
-  
-#### 3、命名规范
-	
-#### 4、流程控制
-##### 语句	
-##### 函数		
-  
-#### 5、类和对象
-	
-### 二 、java进阶
+#### 1 Java简介
+​		重要概念
+​		环境搭建
 
-#### 1、Java面向对象编程OOP
+​	2 数据类型
 
-#### 2、抽象类和接口
+​		基本数据类型
+​		引用数据类型
+​		常量
 
-#### 3、集合框架
+​	3 命名规范
 
-#### 4、异常处理
+​	4 流程控制
 
-#### 5、java IO
+​		语句
+​		函数
 
-#### 6、java多线程
+​	5 类和对象
 
-#### 7、JavaWeb
-##### Web应用	
-##### Servlet	
-##### JSP	
-  
-#### 8、Java设计模式
+二 、java进阶
+
+​	1 Java面向对象编程OOP
+
+​	2 抽象类和接口
+
+​	3 集合框架
+
+​	4 异常处理
+
+​	5 java IO
+
+​	6 java多线程
+
+​	7 JavaWeb
+
+​		Web应用
+​		Servlet
+​		JSP
+
+​	8 Java设计模式
 
 ***
 ## Java基础
@@ -143,13 +146,13 @@ final double PI = 3.1415927;
 
 ```java
 switch(变量){ 
-	case 值:
-        	要执行的语句;
-        	break; 
-		...
-   	default:
-        	要执行的语句; 
-	}
+   case 值:
+        要执行的语句;
+        break; 
+   … 
+  default:
+        要执行的语句; 
+  }
 ```
 
 2. 当判断数据范围，获取判断运算结果boolean类型时，需要使用if。
@@ -165,10 +168,10 @@ switch(变量){
 - java函数定义：
 
   ```java
-   修饰符 返回值类型 函数名(参数类型 形式参数1,参数类型 形式参数1,...){
-   	执行语句;
-	return 返回值;
-	}/*没有具体的返回值时，返回的返回值类型用void关键字表示。*/
+   修饰符 返回值类型 函数名(参数类型 形式参数1，参数类型 形式参数1，…){
+        执行语句；
+       return 返回值；
+    }/*没有具体的返回值时，返回的返回值类型用void关键字表示。*/
   ```
 
 - java函数重载：
@@ -188,9 +191,9 @@ switch(变量){
 
 ```java
 public class Test{
-	int a=0; //全局变量
-	public static void main(String[] args){
-	int b =0;//局部变量
+　　int a=0; //全局变量
+　　public static void main(String[] args){
+　　int b =0；//局部变量
     }
 }
 ```
@@ -372,8 +375,7 @@ public void showInfo() throws Exception {    // 抛出Exception
   FileInputStream in = new FileInputStream("C://Record.txt");  // 创建IO对象 
 }
 
-/*如果希望程序自行抛出异常，可以使用throw语句来实现。
-使用throw语句抛出的是异常类的实例，通常与if语句一起使用*/
+//如果希望程序自行抛出异常，可以使用throw语句来实现。使用throw语句抛出的是异常类的实例，通常与if语句一起使用
 if(x < 0) {
   throw new Exception("程序异常，x不能小于0。");
 }
@@ -472,20 +474,20 @@ if(x < 0) {
    ```java
    class Thread1 extends Thread{				
    	private String name;
-       	public Thread1(String name) {
-          	this.name=name;
-       	}
-   	public void run() 							//结果
-           for (int i = 0; i < 5; i++) {						//A执行  :  0
-               System.out.println(name + "执行  :  " + i);	   	      		//B执行  :  0
-               try {								//A执行  :  1
-                   sleep((int) Math.random() * 10);				//A执行  :  2
-               } catch (InterruptedException e) {					//A执行  :  3
-                   e.printStackTrace();						//A执行  :  4
-               }									//B执行  :  1
-           }									//B执行  :  2  										
-   	}									//B执行  :  3 
-   }										//B执行  :  4 				
+       public Thread1(String name) {
+          this.name=name;
+       }
+   	public void run() 												//结果
+           for (int i = 0; i < 5; i++) {								//A执行  :  0
+               System.out.println(name + "执行  :  " + i);	   		   //B执行  :  0
+               try {													//A执行  :  1
+                   sleep((int) Math.random() * 10);					//A执行  :  2
+               } catch (InterruptedException e) {						//A执行  :  3
+                   e.printStackTrace();								//A执行  :  4
+               }														//B执行  :  1
+           }															//B执行  :  2  																											//B执行  :  3 
+   	}																//B执行  :  4 
+   }															
    class Thread2 implements Runnable{
    	private String name;
    
@@ -494,18 +496,18 @@ if(x < 0) {
    	}
    
    	@Override
-   	public void run() {						
-   		  for (int i = 0; i < 5; i++) {
-   	            System.out.println(name + "执行  :  " + i);		      	//C执行  :  0
-   	            try {							//D执行  :  0
+   	public void run() {												//结果
+   		  for (int i = 0; i < 5; i++) {								//输出：
+   	            System.out.println(name + "执行  :  " + i);		   //C执行  :  0
+   	            try {												//D执行  :  0
    	            	Thread.sleep((int) Math.random() * 10);			//D执行  :  1
-   	            } catch (InterruptedException e) {				//C执行  :  1
-   	                e.printStackTrace();					//D执行  :  2
-   	            }								//C执行  :  2
-   	        }								//D执行  :  3
-   										//C执行  :  3
-   	}									//D执行  :  4
-   										//C执行  :  4
+   	            } catch (InterruptedException e) {					//C执行  :  1
+   	                e.printStackTrace();							//D执行  :  2
+   	            }													//C执行  :  2
+   	        }														//D执行  :  3
+   																	//C执行  :  3
+   	}																//D执行  :  4
+   																	//C执行  :  4
    }
    public class Main {
    	public static void main(String[] args) {			
@@ -672,4 +674,150 @@ if(x < 0) {
 - 从现实角度来说，我们每一个人都是一个观察者，同时也是一个被观察者。作为被观察者，我们会发出一些信息，观察者在接收到这些信息后，会做出相应的反映；而作为观察者，我们是可以被“被观察者”所发出的信息影响的。一个被观察者，可能存在多个观察者。也就是说，一个被观察者所发出的信息，可能会影响到多个观察者。观察者设计模式，定义了一种一对多的关联关系。一个对象A与多个对象B、C、D之间建立“被观察与观察关系”。当对象A的状态发生改变时，通知所有观察者对象B、C、D。当观察者对象B、C、D在接收到A的通知后，根据自身实际情况，做出相应改变。当然，观察者与被观察者指的都是具有某一类功能的对象，所以这里的观察者与被观察者都是指的接口，而真正的观察者对象与被观察者对象，是指实现了这些接口的类的对象。
 
 
+
+***
+## Java项目介绍
+
+#### 一、文件上传下载
+
+- 本次文件下载指的是文件从服务器下载到浏览器后，浏览器并不直接解析，而是以附件的形式保存到客户端。文件上传是客户端向服务器上传文件。即将保存在客户端的文件上传至服务器中一个副本，保存到服务器中。
+- 实现了多种上传下载方式，每种方式各有优劣。
+
+
+
+##### 1. 文件上传
+   - 文件上传要求客户端表单提交特殊的请求----multipart请求，即包含多部分数据的请求。所以文件上传表单对于表单数据的编码类型要求，必须为mutipart/form-data。即要为<form/>标签指定enctype属性值为“mutipart/form-data”。enctype，即encoding type，编码类型。
+   - 由于客户端上传文件的大小是不确定的，所以HTTP协议规定，文件上传的数据要存放于请求正文中，而不能出现在URL的地址栏中。也就是说，文件上传的表单，必须提交POST请求，而不能提交GET请求。
+
+1.1  服务端手工接收上传文件
+
+- 服务端接收上传的文件，可以通过输入流来完成。而输入流可以通过HttpServletRequest的getInputStream()获取到。
+
+```java
+<form action="uploadServlet" method="POST" enctype="multipart/form-data"
+```
+
+```java
+//定义UploadServlet
+ServletInputStream is = request.getInputStream();//获取请求的输入流，该流中只存放了请求正文体数据
+
+//读取输入流中的数据
+byte[] buffer = new byte[1024];
+int len = -1;
+while(len = is.read(buffer) != -1){
+    String str = new String(buffer,0,len);
+    ou.print(str);
+}
+is.close();
+```
+
+1.2  使用第三方工具上传
+
+- FileUpload工具存放在Apacher的Commons中。
+
+  ```java
+  public class UploadServlet extends HttpServlet {
+  	protected void doPost(HttpServletRequest request，
+                            HttpServletResponse response) 
+          					throws ServletException,IoException {
+  	try {
+  		// 1.判断请求是否为Multipart请求
+  		if( lserv1etFileUpload.isMuLt ipartContent(request)) {
+  			throw new RuntimeException("该请求不能完成文件上传");
+  		//2.创建文件项工厂
+  		DiskFileItemFactory factory = new DiskFileItemFactory();
+   		//3.创建文件上传核心组件
+  	ServletFileUpload servletFileUpload = new ServletFileUpload(factory);
+  		//4.解析Multipart请求,获哎所有请求体正文中的item
+  		List<FileItem> fileItems = servletFileUpload.parseRequest(request);
+  		//5、解析每个请求正文体中的item
+          for (FileItem item : fileItems) {
+            	if(item.isFormField()) {//若item为普通参数
+                  String fie1dName = item.getFieldName(); //获取参数名
+  				String fieldValue = item.getString();//获取参数值							
+                  System.out.println(fieldName + " :" + fieldValue);
+            }else {                             // 若item为普通参数
+                String fileName = item.getName(); //获取文件名
+  			  //获取输入流
+                InputStream is = item.getInputStream();
+                //创建输出流
+  			   String path = this.getServletContext().getRealPath(" /images");
+                File desFile = new File(path,fileName);
+  			  FileOutputStream fos = new FileOutputStream(desFile);
+  			  byte[]bytes = new byte[1024];
+                int len = -1;
+  			  while((len = is.read(bytes))l= -1){
+  				fos.write(bytes, 0,len);
+                }
+  //关闭流
+  				fos.close();
+  				is.close();
+  			}
+          }  
+     }catch (FileuploadException e) {
+      e.printStackTrace();
+  	}
+    }
+  }
+  
+  ```
+  
+
+1.3 使用第三方工具上传
+
+- 文件由浏览器通过网络上传到服务器，并不是直接通过一条网络线路将所有请求数据发送到了服务器的。而是将这些数据分为了很多个数据包，这些数据包分别编号后，经由不同的网络线路最终发送到了同一台机器----服务器。这些数据包到达服务器的时间会根据不同的网络线路的情况不同，分别先后到达服务器，不一定是按照编号顺序到达的，或者是大多数情况下是不会按照编号顺序到达的。那么，服务器就会在其临时目录中，创建一个临时文件，将这些数据包进行拼接组装。
+
+  ```java
+  	//设置临时文件创建的临界值
+      factory.setSizeThreshold(1024*1024* 2);
+  	//设置临时文件目录
+      String tempPath = this.getServletContext().getRealPath("/temp");
+  	File tempFile = new File(tempPath);
+  	factory.setRepository(tempFile);
+  ```
+
+
+
+1.4 参数名问题
+
+- 解决普通参数的中文乱码问题，只需使用FileItem的带参getString(String  Encoding)方法获取参数名即可。
+- 上传文件名的中文乱码问题，需要通过ServletFileUpload的方法setHeadEncoding()指定上传文件请求头部编码的方式解决。
+- 为了解决浏览器向服务器发送文件名不同这个问题，需要使用String的substring()方法截取出文件名。因为文件名一定是最后一个”\”后面部分。
+- 对于相同文件名的上传问题，只需要使保存在服务器端的文件名称唯一即可。例如，为原始文件名前添加一个当前系统时间System.currentTimeMillis()。
+
+
+
+1.5 文件大小问题
+
+- 对于上传文件的大小，可以通过ServletFileUpload的setFileSizeMax()与setSizeMax()方法进行控制。
+- setFileSizeMax()用于设置单个文件上传的最大值，而setSizeMax()用于设置单次上传的最大值。即若一次上传多个文件，每个文件的大小边界值与所有文件加起来的最大小值。
+
+
+
+##### 2. 文件下载
+
+- 超链接下载：将下载资源作为超链接的链接目的文件出现。若浏览器可以解析该资源文件，则将在浏览器上直接显示文件内容；若浏览器不支持该文件的解析，则会弹出另存为对话框，要求用户保存。缺点：不同的浏览器，以及相同的浏览器所安装的插件不同，那么其对于资源的解析能力也就不同，其是否弹出另存为对话框的情况也就不一样。决定权由浏览器掌握。
+
+```html
+<body>
+	<a href="$ipageContext.request.contextPath }/resources/aaa.exe">下载aaa.exe</a><br>
+    <a href="${pageContext.request.contextPath j/resources/bbb.xmlL ">下裁bbb.xml</a><br>
+    <a href="$ipageContext.request.contextPath }/resources/ccc.jpg">下载ccc.jpg</a><br>
+    <a href="$ipageContext.request.contextPath j/resources/ddd. pdf">下载ddd.pdf</a><br>
+    <a href= "${pageContext.request.contextPath }/resources/eee.rar">下数eee.rar</a><br>
+</body>
+
+```
+
+- Servlet下载：若要使下载的文件以附件的形式出现在浏览器，则需要设置响应头的属性content-disposition的值为attachment，且需要指定浏览器下载后显示的文件名。即需要指定content-disposition的值为attachment;filename=文件名。
+
+```java
+// 设置响应头属性值，使文件以附件形式下载
+response.setHeader("content-disposition","attachment;filename=test.jpg");
+```
+
+```java
+// 解决中文乱码问题
+fileName = new String(fileName.getBytes("UTF-8","ISO8859-1"));
+```
 
