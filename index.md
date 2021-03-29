@@ -821,3 +821,226 @@ response.setHeader("content-disposition","attachment;filename=test.jpg");
 fileName = new String(fileName.getBytes("UTF-8","ISO8859-1"));
 ```
 
+
+
+#### 二、基于karaf的JavaWeb项目
+
+##### 1.karaf简介
+
+Karaf是Apache旗下的一个开源项目。Karaf同时也是一个基于OSGi的运行环境，Karaf提供了一个轻量级的OSGi容器，可以用于部署各种组件，应用程序。Karaf提供了很多特性用于帮助开发者和用户更加灵活的部署应用，例如：热部署、动态配置、几种日志处理系统、本地系统集成、可编程扩展控制台、ssh远程访问、内置安装认证机制等等。同时Karaf作为一款成熟而且优秀的OSGi运行环境以及容器已经被诸多Apache项目作为基础容器,例如：Apache Geronimo， ApacheServiceMix，Fuse ESB，由此可见Karaf在性能，功能和稳定性上都是个不错的选择。
+
+##### 2.通过karaf部署项目
+
+- karaf官网提供了多种部署项目的例子，本人主要是使用其中的启动器部署和feature部署。
+
+- 两种部署都需要安装web控制台,在karaf控制台上运行：
+
+  ```
+  featrue:install webconsole
+  ```
+
+  
+  
+  ###### 2.1 通过启动器部署	
+  
+  - 通过启动器部署需要提供注册和注销的servlet名称。如：
+  
+  ```java
+   httpService.registerServlet("/ApiServlet", new ApiServlet(), null, null);//注册servlet
+   ((HttpService) service).unregister("/ApiServlet");//注销servlet
+  ```
+  
+  
+  
+  - 在pom文件中需要指定打包方式为bundle，并提供相关插件。
+  
+    ```java
+    <packaging>bundle</packaging>//设置打包方式为bundle
+        
+    //提供相关插件   
+    <plugin>
+    	<groupId>org.apache.felix</groupId>
+    	<artifactId>maven-bundle-plugin</artifactId>
+    	<version>${maven-bundle-plugin.version}</version>
+    	<extensions>true</extensions>
+    </plugin>
+    ```
+  
+ 
+  
+- 对项目进行打包后，在浏览器输入http://localhost:8181/system/console/bundles（初始用户名，密码都是karaf），进入web控制台。点击install/update按钮安装生成的jar文件。
+  
+  
+  
+  
+  
+  ![image-20210329102356712](C:\Users\LiangXin\AppData\Roaming\Typora\typora-user-images\image-20210329102356712.png)
+  
+  
+  
+  
+  
+  - 找到该bundle并启动。如无法启动，则单击进入详细页面查看pom文件的依赖是否能够解析。如果依赖报红，可以通过上一步的方法手动导入依赖并启动该依赖。
+
+
+
+![image-20210329103808369](C:\Users\LiangXin\AppData\Roaming\Typora\typora-user-images\image-20210329103808369.png)
+
+
+
+<img src="C:\Users\LiangXin\AppData\Roaming\Typora\typora-user-images\image-20210329103842061.png" alt="image-20210329103842061" style="zoom:200%;" />
+
+
+
+​						
+
+![image-20210329103750367](C:\Users\LiangXin\AppData\Roaming\Typora\typora-user-images\image-20210329103750367.png)
+
+
+
+##### 3.通过feature部署项目
+
+- 通过feature部署项目需要指定资源目录feature，并在该目录下创建feature.xml文件。通过feature.xml文件配置项目bundle相关参数。
+
+  ```java
+  <features name="${project.artifactId}-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0">
+  
+      <feature name="Http-client" version="${project.version}">
+          <bundle>mvn:cn.lx/Http-client/${project.version}</bundle>
+      </feature>
+  
+      <feature name="Http-index" version="${project.version}">
+          <bundle>webbundle:mvn:cn.lx/Http-index/${project.version}/war?Web-ContextPath=main</bundle>
+      </feature>
+  
+  </features>
+  ```
+
+- 将项目打包后，通过feature:repo-add 将项目添加进来，最后通过feature:install安装指定的bundle
+
+  ```
+  feature:repo-add mvn:cn.lx/Http-feature/1.0-SNAPSHOT/xml
+  feature:install Http-client
+  feature:install Http-index
+  ```
+
+
+
+#### 三、Java调用第三方接口
+
+- JDK的java.net包中提供了访问HTTP协议的基本功能的类：HttpURLConnection。
+
+- URLConnection是个抽象类，它有两个直接子类分别是HttpURLConnection和JarURLConnection。另外一个重要的类是URL，通常URL可以通过传给构造器一个String类型的参数来生成一个指向特定地址的URL实例。
+
+- HttpURLConnection是Java的标准类，它继承自URLConnection，可用于向指定网站发送GET请求、POST请求。它在URLConnection的基础上提供了如下便捷的方法：
+
+  ```java
+  int getResponseCode();        // 获取服务器的响应代码。
+  String getResponseMessage();  // 获取服务器的响应消息。
+  String getResponseMethod();   // 获取发送请求的方法。
+  void setRequestMethod(String method); // 设置发送请求的方法。
+  ```
+
+
+
+##### 3.1 HttpURLConnection使用小结：
+
+1.  HttpURLConnection的connect()函数，实际上只是建立了一个与服务器的tcp连接，并没有实际发送http请求。无论是post还是get，Http请求实际上直到HttpURLConnection的getInputStream()这个函数里面才正式发送出去。
+
+2.  在用POST方式发送URL请求时，URL请求参数的设定顺序是重中之重， 对connection对象的一切配置（那一堆set函数） 都必须要在connect()函数执行之前完成。而对outputStream的写操作，又必须要在inputStream的读操作之前。  这些顺序实际上是由http请求的格式决定的。 如果inputStream读操作在outputStream的写操作之前，会抛出异常：
+
+   ```java
+     java.net.ProtocolException: Cannot write output after reading input....... 
+   ```
+
+
+
+
+3. http请求实际上由两部分组成， 一个是http头，所有关于此次http请求的配置都在http头里面定义， 一个是正文content。  connect()函数会根据HttpURLConnection对象的配置值生成http头部信息，因此在调用connect函数之前， 就必须把所有的配置准备好。 
+
+   
+
+4. 在http头后面紧跟着的是http请求的正文，正文的内容是通过outputStream流写入的，  实际上outputStream不是一个网络流，充其量是个字符串流，往里面写入的东西不会立即发送到网络， 而是存在于内存缓冲区中，待outputStream流关闭时，根据输入的内容生成http正文。 至此，http请求的东西已经全部准备就绪。在getInputStream()函数调用的时候，就会把准备好的http请求 正式发送到服务器了，然后返回一个输入流，用于读取服务器对于此次http请求的返回信息。由于http 请求在getInputStream的时候已经发送出去了（包括http头和正文），因此在getInputStream()函数  之后对connection对象进行设置（对http头的信息进行修改）或者写入outputStream（对正文进行修改） 都是没有意义的了，执行这些操作会导致异常的发生。 
+
+
+
+##### 3.2 Servlet开发注意点：
+
+1. 对于客户端发送的POST类型的HTTP请求，Servlet必须实现doPost方法，而不能用doGet方法。 
+
+2. HttpURLConnection是基于HTTP协议的，其底层通过socket通信实现。如果不设置超时（timeout），在网络异常的情况下，可能会导致程序僵死而不继续往下执行。可以通过以下两个语句来设置相应的超时： 
+
+   - System.setProperty("sun.net.client.defaultConnectTimeout", 超时毫秒数字符串); 
+
+   - System.setProperty("sun.net.client.defaultReadTimeout", 超时毫秒数字符串); 
+   
+   ​       其中： sun.net.client.defaultConnectTimeout：连接主机的超时时间（单位：毫秒） sun.net.client.defaultReadTimeout：从主机读取数据的超时时间（单位：毫秒） 
+
+   例如： 
+   System.setProperty("sun.net.client.defaultConnectTimeout", "30000"); 
+   System.setProperty("sun.net.client.defaultReadTime", "30000");
+
+
+
+##### 3.3 代码实例：
+
+- 示例代码如下： 
+
+  ```java
+  public class API {
+      public static String sendPost(String url,String method) throws IOException {
+          OutputStreamWriter out;
+          BufferedReader in = null;
+          String result = "";
+          URL realUrl = new URL(url);
+          // 打开和URL之间的连接
+          HttpURLConnection conn = (HttpURLConnection) realUrl.openConnection();
+          //设置超时时间
+          conn.setConnectTimeout(50000);
+          conn.setReadTimeout(150000);
+          // 设置通用的请求属性
+          conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+          conn.setRequestProperty("accept", "*/*");
+          conn.setRequestProperty("connection", "Keep-Alive");
+          conn.setRequestProperty("User-agent",
+                  "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+          if (method.equals("PATCH")) {
+              conn.setRequestProperty("X-HTTP-Method-Override", "PATCH");
+              conn.setRequestMethod("POST");
+          } else {
+              conn.setRequestMethod(method);
+          }
+          conn.setRequestProperty("Authorization", "Bearer d66f5ff895bbe5baa3ed0426e92fd58c9e6f6cf4");
+          // 发送POST请求必须设置如下两行
+          /*  if(method.equals("POST"))
+          {
+              conn.setDoOutput(true);
+          }*/
+          conn.setDoOutput(false);
+          conn.setDoInput(true);
+          // 获取URLConnection对象对应的输出流
+          /* out = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");// utf-8编码*/
+          // 发送请求参数
+         /* out.write(body);
+          // flush输出流的缓冲
+          out.flush();*/
+          // 定义BufferedReader输入流来读取URL的响应
+          in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf8"));
+          String line;
+          while ((line = in.readLine()) != null) {
+              result += line;
+          }
+        /*  if (out != null) {
+              out.close();
+          }*/
+          if (in != null) {
+              in.close();
+          }
+          return  result;
+      }
+  }
+       
+  ```
+
+  
+
